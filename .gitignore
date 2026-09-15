@@ -30,3 +30,4 @@ target/
 .idea
 .zed
 .vscode
+.env
