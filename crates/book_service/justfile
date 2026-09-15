@@ -1,0 +1,30 @@
+export CARGO_TARGET_DIR := "../../target"
+
+# List available commands
+help:
+    @just --list --unsorted --list-heading $'BOOK-SERVICE\n'
+
+# Run lints (cargo fmt and clippy)
+lint:
+    cargo +nightly fmt --package book_service -- --check
+    cargo clippy --all-targets -- -D warnings
+
+# Run cargo check
+check:
+    cargo check
+
+# Run cargo build
+build:
+    cargo build --all-targets
+
+# Run cargo clean on the book_service package
+clean:
+    cargo clean --package book_service
+
+# Run cargo test
+test:
+    cargo test
+
+# Run server app
+app:
+    cargo run --bin app
