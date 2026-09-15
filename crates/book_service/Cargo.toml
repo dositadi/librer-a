@@ -1,0 +1,19 @@
+[package]
+name = "book_service"
+version = "0.1.0"
+edition = "2024"
+default-run = "app"
+
+[[bin]]
+name = "app"
+path = "src/bin/app.rs"
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = "1.0.104"
+axum = "0.8.9"
+tokio = { version = "1.53.1", features = ["full"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter","fmt","json","registry"]}
