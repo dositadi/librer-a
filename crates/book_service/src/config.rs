@@ -1,6 +1,6 @@
 use envconfig::Envconfig;
 
-#[derive(Envconfig)]
+#[derive(Clone, Envconfig)]
 pub struct AppConf {
     #[envconfig(nested)]
     pub server: ServerConf,
@@ -8,11 +8,11 @@ pub struct AppConf {
 
 impl AppConf {
     pub fn init() -> Self {
-        Self::init_from_env().expect("Failed to load configuration!, check the .env file.")
+        Self::init_from_env().expect("Failed to load configuration!, check the .env file")
     }
 }
 
-#[derive(Envconfig)]
+#[derive(Clone, Envconfig)]
 pub struct ServerConf {
     #[envconfig(from = "SERVER_PORT")]
     pub port: u16,

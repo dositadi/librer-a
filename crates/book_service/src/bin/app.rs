@@ -1,4 +1,4 @@
-use book_service::routes;
+use book_service::{ AppConf, AppState, routes };
 use tokio::net::TcpListener;
 use tracing::info;
 use tracing_subscriber::{ EnvFilter, fmt, layer::SubscriberExt, util::SubscriberInitExt };
@@ -6,21 +6,24 @@ use tracing_subscriber::{ EnvFilter, fmt, layer::SubscriberExt, util::Subscriber
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| {
-        "info, tower_http=error, axum=error, toasty=error, tokio_postgres=error".into()
+        "info,tower_http=error,axum=error,toasty=error,tokio_postgres=error".into()
     });
 
     tracing_subscriber
         ::registry()
         .with(filter)
-        .with(fmt::layer().json().with_current_span(false).with_target(false))
+        .with(fmt::layer().json().with_current_span(true).with_target(true))
         .init();
 
-    let addr = String::from("0.0.0.0:3000");
+    let conf = AppConf::init();
+    let addr = conf.server.to_addr();
+    let server_conf = conf.server;
+    let app_state = AppState { server_conf };
+
+    let app = routes::init(app_state);
     info!(addr=%addr, "Starting server");
 
     let listener = TcpListener::bind(addr).await?;
-
-    let app = routes::init();
 
     axum::serve(listener, app).await?;
 

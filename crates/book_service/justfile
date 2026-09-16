@@ -27,4 +27,4 @@ test:
 
 # Run server app
 app:
-    cargo run --bin app
+    cargo run --bin app -r -q
