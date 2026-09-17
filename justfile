@@ -31,3 +31,7 @@ lint:
 
 # forward to book service
 mod book "crates/book_service"
+
+# extension to view crates info
+info:
+    cargo install cargo-information

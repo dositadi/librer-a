@@ -20,3 +20,7 @@ tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter","fmt","json","registry"]}
 tower = { version = "0.5.1", features = ["full"] }
 tower-http = { version = "0.7.1", features = ["cors", "trace", "request-id"] }
+jiff = "0.2.37"
+uuid = { version = "1.26.1", features = ["v7", "fast-rng"] }
+toasty = { version = "0.10.0", features = ["migration", "jiff", "postgresql"] }
+toasty-cli = "0.10.0"
