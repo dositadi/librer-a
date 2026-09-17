@@ -27,4 +27,5 @@ test:
 
 # Run server app
 app:
+    @export $(grep -v '^#' .env | xargs) && \
     cargo run --bin app -r -q

@@ -3,14 +3,14 @@ services:
     image: postgres:18-alpine
     container_name: liberia-db
     environment:
-      POSTGRES_DB: liberia-db
-      POSTGRES_USER: liberia-user
-      POSTGRES_PASSWORD: liberia-pass
+      POSTGRES_DB: ${{POSTGRES_DB}}
+      POSTGRES_USER: ${{POSTGRES_USER}}
+      POSTGRES_PASSWORD: ${{POSTGRES_PASSWORD}}
     ports:
       - "5432:5432"
 
     healthcheck:
-      test: ["CMD SHELL", "pg_isready -U liberia-user -d liberia-db"]
+      test: ["CMD SHELL", "pgisready -U ${{POSTGRES_USER}} -d ${{POSTGRES_DB}}"]
       interval: 3s
       timeout: 5s
       retries: 5
