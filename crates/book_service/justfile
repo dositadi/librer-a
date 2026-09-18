@@ -1,8 +1,8 @@
-export CARGO_TARGET_DIR := "../../target"
+
 
 # List available commands
 help:
-    @just --list --unsorted --list-heading $'BOOK-SERVICE\n'
+    just --list --unsorted --list-heading $'BOOK-SERVICE\n'
 
 # Run lints (cargo fmt and clippy)
 lint:
@@ -27,5 +27,21 @@ test:
 
 # Run server app
 app:
-    @export $(grep -v '^#' .env | xargs) && \
+    export $(grep -v '^#' .env | xargs) && \
     cargo run --bin app -r -q
+
+# Run DB migration cli
+migration *cmd:
+    export $(grep -v "^#" .env | xargs) && \
+    DB_HOST="localhost" \
+    DATABASE_URL="postgres://liberia-user:liberia-pass@localhost:5432/liberia-db" \
+    cargo run --bin migration -- migration {{ cmd }}
+
+# Run docker commands
+docker *cmd:
+    docker {{ cmd }}
+
+
+docker-db: 
+    docker exec -it liberia-db psql -U liberia-user -d liberia-db
+

@@ -8,6 +8,10 @@ default-run = "app"
 name = "app"
 path = "src/bin/app.rs"
 
+[[bin]]
+name = "migration"
+path = "src/bin/migration.rs"
+
 [lints]
 workspace = true
 
@@ -17,7 +21,12 @@ axum = "0.8.9"
 envconfig = "0.11.1"
 tokio = { version = "1.53.1", features = ["full"] }
 tracing = "0.1.44"
-tracing-subscriber = { version = "0.3.23", features = ["env-filter","fmt","json","registry"]}
+tracing-subscriber = { version = "0.3.23", features = [
+    "env-filter",
+    "fmt",
+    "json",
+    "registry",
+] }
 tower = { version = "0.5.1", features = ["full"] }
 tower-http = { version = "0.7.1", features = ["cors", "trace", "request-id"] }
 jiff = "0.2.37"
