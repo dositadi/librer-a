@@ -1,7 +1,8 @@
 use jiff::{ Timestamp, civil::Date };
+use serde::{ Deserialize, Serialize };
 use uuid::Uuid;
 
-#[derive(Debug, Clone, toasty::Model)]
+#[derive(Debug, Clone, toasty::Model, Serialize, Deserialize)]
 pub struct Book {
     #[key]
     #[auto]
@@ -24,8 +25,9 @@ pub struct Book {
     pub updated_at: Timestamp,
 }
 
-#[derive(Clone, Copy, PartialEq, Debug, toasty::Embed)]
+#[derive(Clone, Copy, PartialEq, Debug, toasty::Embed, Serialize, Deserialize)]
 #[column(type = u8)]
+#[serde(rename_all = "lowercase")]
 pub enum BookStatus {
     #[column(variant = 0)]
     Pending,

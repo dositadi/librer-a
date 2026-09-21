@@ -29,7 +29,9 @@ tracing-subscriber = { version = "0.3.23", features = [
 ] }
 tower = { version = "0.5.1", features = ["full"] }
 tower-http = { version = "0.7.1", features = ["cors", "trace", "request-id"] }
-jiff = "0.2.37"
-uuid = { version = "1.26.1", features = ["v7", "fast-rng"] }
+jiff = {version = "0.2.37", features = ["serde"]}
+uuid = { version = "1.26.1", features = ["v7", "fast-rng", "serde"] }
 toasty = { version = "0.10.0", features = ["migration", "jiff", "postgresql"] }
 toasty-cli = "0.10.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"

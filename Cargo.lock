@@ -412,6 +412,8 @@ dependencies = [
  "axum",
  "envconfig",
  "jiff",
+ "serde",
+ "serde_json",
  "toasty",
  "toasty-cli",
  "tokio",
