@@ -45,3 +45,5 @@ docker *cmd:
 docker-db: 
     docker exec -it liberia-db psql -U liberia-user -d liberia-db
 
+docker-printenv:
+    docker exec -it liberia-db printenv | grep POSTGRES
