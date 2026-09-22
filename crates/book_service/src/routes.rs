@@ -2,7 +2,7 @@ use std::{ str::FromStr, time::Duration };
 
 use axum::{
     Router,
-    extract::Request,
+    extract::{ DefaultBodyLimit, Request },
     http::{ HeaderName, HeaderValue, Method, StatusCode },
     response::{ IntoResponse, Response },
     routing::get,
@@ -15,7 +15,7 @@ use tower_http::{
 };
 use tracing::{ Span, info, info_span };
 
-use crate::AppState;
+use crate::{ AppState, app::book };
 
 const REQUEST_ID_HEADER: &str = "x-request-id";
 
@@ -55,7 +55,12 @@ pub fn init(state: AppState) -> Router {
         .layer(PropagateRequestIdLayer::new(x_request_header))
         .layer(cors_layer(&state));
 
-    Router::new().route("/livez", get(livez)).layer(middleware).with_state(state)
+    Router::new()
+        .route("/livez", get(livez))
+        .nest("/v1/books", book::router())
+        .layer(DefaultBodyLimit::max(state.server_conf.default_body_limits))
+        .layer(middleware)
+        .with_state(state)
 }
 
 fn cors_layer(state: &AppState) -> CorsLayer {
