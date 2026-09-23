@@ -4,7 +4,7 @@ const DEFAULT_PER_PAGE: usize = 10;
 const MAX_PER_PAGE: usize = 100;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-struct Pagination {
+pub struct Pagination {
     #[serde(default = "default_per_page")]
     pub per_page: usize,
 

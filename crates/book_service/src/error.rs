@@ -1,8 +1,5 @@
-use axum::{
-    body::Body,
-    http::{ HeaderValue, Response, StatusCode, header },
-    response::IntoResponse,
-};
+use axum::{ Json, http::{ HeaderValue, StatusCode, header }, response::IntoResponse };
+use serde_json::json;
 
 pub enum APIError {
     ServerError,
@@ -10,21 +7,27 @@ pub enum APIError {
     RequestTimeout,
     Conflict,
     BadRequest,
+    NoRows,
 }
 
 impl IntoResponse for APIError {
     fn into_response(self) -> axum::response::Response {
-        let (status, byte): (StatusCode, &[u8]) = match self {
-            APIError::BadRequest => { (StatusCode::BAD_REQUEST, b"\"error\": \"invalid request\"") }
-            APIError::Conflict => { (StatusCode::CONFLICT, b"\"error\": \"conflict\"") }
-            APIError::NotFound => { (StatusCode::NOT_FOUND, b"\"error\": \"not found\"") }
-            APIError::RequestTimeout => { (StatusCode::REQUEST_TIMEOUT, b"\"error\": \"timeout\"") }
+        let (status, err): (StatusCode, &str) = match self {
+            APIError::BadRequest => { (StatusCode::BAD_REQUEST, "invalid request") }
+            APIError::Conflict => { (StatusCode::CONFLICT, "conflict") }
+            APIError::NotFound => { (StatusCode::NOT_FOUND, "not found") }
+            APIError::RequestTimeout => { (StatusCode::REQUEST_TIMEOUT, "timeout") }
             APIError::ServerError => {
-                (StatusCode::INTERNAL_SERVER_ERROR, b"\"error\": \"something wrong happened\"")
+                (StatusCode::INTERNAL_SERVER_ERROR, "something wrong happened")
             }
+            APIError::NoRows => { (StatusCode::NOT_FOUND, "no rows") }
         };
 
-        let mut response = Response::new(Body::from(byte));
+        let body = Json(json!({
+                "error":err
+            }));
+
+        let mut response = body.into_response();
 
         response
             .headers_mut()

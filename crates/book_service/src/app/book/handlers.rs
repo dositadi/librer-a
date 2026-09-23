@@ -1,11 +1,19 @@
-use axum::{ Json, extract::{ Path, State }, http::StatusCode, response::IntoResponse };
+use axum::{ Json, extract::{ Path, Query, State }, http::StatusCode, response::IntoResponse };
 use tracing::{ error, info };
 use uuid::Uuid;
 
-use crate::{ AppState, app::book::payload::{ BookRequest }, error::APIError, models::Book };
+use crate::{
+    AppState,
+    app::{ book::payload::BookRequest, shared::Pagination },
+    error::APIError,
+    models::Book,
+};
 
-pub async fn list(State(mut state): State<AppState>) -> Result<impl IntoResponse, APIError> {
-    let (limit, offset) = (10, 0);
+pub async fn list(
+    State(mut state): State<AppState>,
+    Query(pagination): Query<Pagination>
+) -> Result<impl IntoResponse, APIError> {
+    let (limit, offset) = pagination.limit_offset();
 
     let books = Book::all()
         .limit(limit)
@@ -15,6 +23,8 @@ pub async fn list(State(mut state): State<AppState>) -> Result<impl IntoResponse
             error!(target: "database", "failed to fetch: {err:?}");
             APIError::ServerError
         })?;
+
+    
 
     Ok((StatusCode::OK, Json(books)))
 }

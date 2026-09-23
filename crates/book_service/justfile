@@ -28,6 +28,7 @@ test:
 # Run server app
 app:
     export $(grep -v '^#' .env | xargs) && \
+    DB_HOST="localhost" \
     cargo run --bin app -r -q
 
 # Run DB migration cli
