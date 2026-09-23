@@ -8,7 +8,6 @@ use axum::{
 };
 use garde::{ I18n, Report, Validate, i18n, with_i18n };
 use serde::{ Serialize, de::DeserializeOwned };
-use tracing_subscriber::fmt::format;
 
 #[derive(Serialize)]
 pub struct ValidationErrorResponse {
