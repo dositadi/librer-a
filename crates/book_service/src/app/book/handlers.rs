@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::{
     AppState,
-    app::{ book::payload::BookRequest, shared::Pagination },
+    app::{ book::payload::BookRequest, shared::{ Pagination, ValidatedJSON } },
     error::APIError,
     models::Book,
 };
@@ -24,14 +24,12 @@ pub async fn list(
             APIError::ServerError
         })?;
 
-    
-
     Ok((StatusCode::OK, Json(books)))
 }
 
 pub async fn create(
     State(mut state): State<AppState>,
-    Json(payload): Json<BookRequest>
+    ValidatedJSON(payload): ValidatedJSON<BookRequest>
 ) -> Result<impl IntoResponse, APIError> {
     let saved = Book::create()
         .description(payload.description)
@@ -65,7 +63,7 @@ pub async fn read(
 pub async fn update(
     State(mut state): State<AppState>,
     Path(id): Path<Uuid>,
-    Json(payload): Json<BookRequest>
+    ValidatedJSON(payload): ValidatedJSON<BookRequest>
 ) -> Result<impl IntoResponse, APIError> {
     let book = Book::get_by_id(&mut state.db, id).await.map_err(|err| {
         if err.is_record_not_found() {
