@@ -23,9 +23,12 @@ impl IntoResponse for APIError {
             APIError::NoRows => { (StatusCode::NOT_FOUND, "no rows") }
         };
 
-        let body = Json(json!({
-                "error":err
-            }));
+        let body = Json(
+            json!({
+                "error":err,
+                "status": status.as_str(),
+            })
+        );
 
         let mut response = body.into_response();
 

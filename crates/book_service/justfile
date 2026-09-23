@@ -1,5 +1,4 @@
 
-
 # List available commands
 help:
     just --list --unsorted --list-heading $'BOOK-SERVICE\n'
